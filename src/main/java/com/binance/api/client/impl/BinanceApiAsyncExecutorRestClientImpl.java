@@ -37,10 +37,10 @@ public class BinanceApiAsyncExecutorRestClientImpl implements BinanceApiAsyncExe
                 return v;
             }, responseService);
 
-            f.exceptionallyAsync(throwable -> {
-                callback.onFailure(throwable);
+            f.exceptionally(throwable -> {
+                responseService.submit(()->callback.onFailure(throwable));
                 return null;
-            }, responseService);
+            });
         }
         return f;
     }
